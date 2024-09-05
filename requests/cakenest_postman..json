@@ -1,0 +1,189 @@
+{
+  "info": {
+    "name": "cakenest",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "base",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http:///localhost:8000/"
+      }
+    },
+    {
+      "name": "test",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http:///localhost:8000/api/test"
+      }
+    },
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "cupcake",
+      "item": [
+        {
+          "name": "getCupcakes",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http:///localhost:8000/api/cupcake"
+          }
+        },
+        {
+          "name": "getCupcake",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http:///localhost:8000/api/cupcake/1"
+          }
+        },
+        {
+          "name": "deleteCupcake",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "http:///localhost:8000/api/cupcake/1"
+          }
+        },
+        {
+          "name": "editCupcake",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": "http:///localhost:8000/api/cupcake/3",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Moins bien Cupcake\",\n  \"price\": 3500,\n  \"quantity\": 5,\n  \"isAvailable\": true,\n  \"isAdvertised\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "createCupcake",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http:///localhost:8000/api/cupcake",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Super Cupcake\",\n  \"price\": 4000,\n  \"quantity\": 5,\n  \"isAvailable\": true,\n  \"isAdvertised\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "csrf",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8000/sanctum/csrf-cookie"
+          }
+        },
+        {
+          "name": "login",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "disabled": true,
+                "type": "default"
+              }
+            ],
+            "url": "http://localhost:8000/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cart",
+      "item": [
+        {
+          "name": "createCart",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http:///localhost:8000/api/cart",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cupcakes\": [\n    {\"cupcake\": 1, \"quantity\": 2},\n    {\"cupcake\": 2, \"quantity\": 1},\n    {\"cupcake\": 3, \"quantity\": 5}\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "getCart",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http:///localhost:8000/api/cart",
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "Referer",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "X-XSRF-TOKEN",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
