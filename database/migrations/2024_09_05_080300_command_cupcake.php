@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('command_id')->constrained()->cascadeOnDelete();
             $table->foreignId('cupcake_id')->constrained()->cascadeOnDelete();
             $table->integer('quantity');
+            $table->integer('price_at_time');
         });
     }
 

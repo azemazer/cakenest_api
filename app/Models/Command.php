@@ -11,7 +11,9 @@ class Command extends Model
 {
     use HasFactory;
 
-    public $status = [
+    // const CANCELED = 0;
+
+    public static $status_list = [
         "unpaid" => 0,
         "paid" => 1, 
         "canceled" => 2

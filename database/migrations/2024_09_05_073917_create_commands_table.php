@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('status')->default(0);
             $table->integer('total');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
