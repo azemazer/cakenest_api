@@ -50,6 +50,8 @@ class CommandController extends Controller
                 $cupcake_item->quantity -=  $commanded_stock;
             }
             $new_stocks->push($cupcake_item);
+
+            // Formatage des props table pivot
             array_push($pivot_props, [
                 $cupcake_item->id => [
                     "quantity" => $cupcake_item->quantity,
@@ -78,12 +80,6 @@ class CommandController extends Controller
             "user_id" => $user->id
         ]);
 
-        /*
-[
-    cupcake_id => ['quantity' =>, $quantity 'price_at_time' => $expires],
-    2 => ['expires' => $expires],
-]
-        */
         $command->attach($new_stocks->pluck('id'), $pivot_props);
         $command->save();
 
@@ -114,6 +110,10 @@ class CommandController extends Controller
         //$command->status = Command::CANCELED;
 
         $command->save();
+
+        /*
+        Reste code pour remettre les stocks
+        */
 
         return response($command);
     }
