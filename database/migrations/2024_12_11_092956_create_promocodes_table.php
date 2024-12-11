@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('promocodes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->datetime('validity_date');
+            $table->string('code')->unique();
+            $table->integer('percentage');
         });
     }
 

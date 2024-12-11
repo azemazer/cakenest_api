@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CommandController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\CupcakeController;
+use App\Http\Controllers\PromocodeController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -32,3 +33,6 @@ Route::post('/command', [CommandController::class, 'store']);
 Route::get('/command/{id}', [CommandController::class, 'show']);
 Route::post('cancel_command', [CommandController::class, 'cancel']);
 Route::post('confirm_command', [CommandController::class, 'confirm']);
+
+// Promocode
+Route::get('/promocode/submit', [PromocodeController::class, 'getPromocodeByCode']);

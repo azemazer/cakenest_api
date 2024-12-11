@@ -12,7 +12,7 @@ test('example', function () {
 test('User can submit promocode if valid', function(){
     $user = User::factory()->create();
     $promocode = Promocode::factory()->create();
-
+    
     $response = $this->actingAs($user)
     ->getJson('api/promocode/submit?code=' . $promocode->code)
     ->assertStatus(200);
@@ -35,11 +35,11 @@ test('User cant submit promocode if invalid', function(){
 test('User cant submit promocode if expired', function(){
     $user = User::factory()->create();
     $promocode = Promocode::factory()->create([
-        "validity_date" => new DateTime('tomorrow')
+        "validity_date" => new DateTime('yesterday')
     ]);
 
     $response = $this->actingAs($user)
     ->getJson('api/promocode/submit?code=' . $promocode->code)
     ->assertStatus(403);
-    //...
+
 });
