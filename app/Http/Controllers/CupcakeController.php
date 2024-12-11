@@ -21,16 +21,16 @@ class CupcakeController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'price' => 'required|integer',
-            'quantity' => 'required|integer',
-            'isAvailable' => 'required|boolean',
-            'isAdvertised' => 'required|boolean',
+            'quantity' => 'nullable|integer',
+            'isAvailable' => 'nullable|boolean',
+            'isAdvertised' => 'nullable|boolean',
         ]);
         $cupcake = Cupcake::find($id);
         $cupcake->price = $validated['price'];
         $cupcake->title = $validated['title'];
-        $cupcake->quantity = $validated['quantity'];
-        $cupcake->isAvailable = $validated['isAvailable'];
-        $cupcake->isAdvertised = $validated['isAdvertised'];
+        $cupcake->quantity = isset($validated['quantity']) ? $validated['quantity'] : $cupcake->quantity;
+        $cupcake->isAvailable = isset($validated['isAvailable']) ? $validated['isAvailable'] : $cupcake->isAvailable;
+        $cupcake->isAdvertised = isset($validated['isAdvertised']) ? $validated['isAdvertised'] : $cupcake->isAdvertised;
         $cupcake->save();
         return response($cupcake);
     }
@@ -45,7 +45,7 @@ class CupcakeController extends Controller
         ]);
 
         $cupcake = Cupcake::create($validated);
-        return response($cupcake);
+        return response($cupcake, 201);
     }
 
     function deleteCupcake(Request $request, $id){
