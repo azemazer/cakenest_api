@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Cupcake;
+use App\Models\User;
+use App\Models\Promocode;
+
 test('example', function () {
     $response = $this->get('/');
 
@@ -7,14 +11,71 @@ test('example', function () {
 });
 
 test('Valid promocode reduces command price', function (){
-    //...
+    $user = User::factory()->create();
+    $promocode = Promocode::factory()->create();
+    $cupcakes = Cupcake::factory()->count(5)->create();
+
+    $cupcakes_array = array_map(function ($cupcake) {
+        $cupcake["quantity"] = 1;
+        return $cupcake;
+    }, $cupcakes->toArray());
+
+    $response = $this->actingAs($user)
+    ->postJson('/command', [
+        'cupcakes' => $cupcakes_array,
+        'promocode' => $promocode->code,
+    ])
+    ->assertCreated();
+
+    $total = 0;
+    foreach ($cupcakes_array as $cupcake){
+        $total += $cupcake["price"] * $cupcake["quantity"];
+    }
+
+    $total *= ($promocode->percentage / 100);
+
+    expect(json_decode($response->decodeResponseJson()->json))->toMatchObject([
+        'cupcakes' => $cupcakes->toArray(),
+        'promocode' => $promocode,
+        'total' => $total
+    ]);
+
 });
 
-test('Invalid promocode doesnt reduce command price', function (){
-    //...
+test('Invalid promocode doesnt create command', function (){
+    $user = User::factory()->create();
+    $cupcakes = Cupcake::factory()->count(5)->create();
+
+    $cupcakes_array = array_map(function ($cupcake) {
+        $cupcake["quantity"] = 1;
+        return $cupcake;
+    }, $cupcakes->toArray());
+
+    $response = $this->actingAs($user)
+    ->postJson('/command', [
+        'cupcakes' => $cupcakes_array,
+        'promocode' => "blablah",
+    ])
+    ->assertStatus(403);
 });
 
-test('Expired promocode doesnt reduce command price', function (){
-    //...
+test('Expired promocode doesnt create command', function (){
+    $user = User::factory()->create();
+    $promocode = Promocode::factory()->create([
+        "validity_date" => new DateTime('tomorrow')
+    ]);
+    $cupcakes = Cupcake::factory()->count(5)->create();
+
+    $cupcakes_array = array_map(function ($cupcake) {
+        $cupcake["quantity"] = 1;
+        return $cupcake;
+    }, $cupcakes->toArray());
+
+    $response = $this->actingAs($user)
+    ->postJson('/command', [
+        'cupcakes' => $cupcakes_array,
+        'promocode' => $promocode->code,
+    ])
+    ->assertStatus(403);
 });
 
