@@ -19,6 +19,7 @@ class CupcakeFactory extends Factory
         return [
             'title' => fake()->words(asText:true),
             'price' => fake()->numberBetween(0, 1000),
+            'quantity' => fake()->numberBetween(1, 10)
         ];
     }
 }

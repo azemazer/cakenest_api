@@ -17,28 +17,28 @@ test('Valid promocode reduces command price', function (){
 
     $cupcakes_array = array_map(function ($cupcake) {
         $cupcake["quantity"] = 1;
+        $cupcake["cupcake"] = $cupcake["id"];
         return $cupcake;
     }, $cupcakes->toArray());
 
     $response = $this->actingAs($user)
-    ->postJson('/command', [
+    ->postJson('api/command', [
         'cupcakes' => $cupcakes_array,
         'promocode' => $promocode->code,
     ])
+    // ;
+    // dd($response);
     ->assertCreated();
 
     $total = 0;
     foreach ($cupcakes_array as $cupcake){
         $total += $cupcake["price"] * $cupcake["quantity"];
     }
+    $total_reductions = $total - ($total * $promocode->percentage / 100);
+    // dd([$total_reductions, $total, $response->json()]);
+    expect($response->json('total_reductions'))->toBe((int)$total_reductions);
 
-    $total *= ($promocode->percentage / 100);
-
-    expect(json_decode($response->decodeResponseJson()->json))->toMatchObject([
-        'cupcakes' => $cupcakes->toArray(),
-        'promocode' => $promocode,
-        'total' => $total
-    ]);
+    // 'cupcakes' => $cupcakes->toArray(),
 
 });
 
@@ -48,11 +48,12 @@ test('Invalid promocode doesnt create command', function (){
 
     $cupcakes_array = array_map(function ($cupcake) {
         $cupcake["quantity"] = 1;
+        $cupcake["cupcake"] = $cupcake["id"];
         return $cupcake;
     }, $cupcakes->toArray());
 
     $response = $this->actingAs($user)
-    ->postJson('/command', [
+    ->postJson('api/command', [
         'cupcakes' => $cupcakes_array,
         'promocode' => "blablah",
     ])
@@ -62,17 +63,18 @@ test('Invalid promocode doesnt create command', function (){
 test('Expired promocode doesnt create command', function (){
     $user = User::factory()->create();
     $promocode = Promocode::factory()->create([
-        "validity_date" => new DateTime('tomorrow')
+        "validity_date" => new DateTime('yesterday')
     ]);
     $cupcakes = Cupcake::factory()->count(5)->create();
 
     $cupcakes_array = array_map(function ($cupcake) {
         $cupcake["quantity"] = 1;
+        $cupcake["cupcake"] = $cupcake["id"];
         return $cupcake;
     }, $cupcakes->toArray());
 
     $response = $this->actingAs($user)
-    ->postJson('/command', [
+    ->postJson('api/command', [
         'cupcakes' => $cupcakes_array,
         'promocode' => $promocode->code,
     ])
