@@ -24,8 +24,10 @@ Route::post('/cupcake', [CupcakeController::class, 'createCupcake'])->middleware
 Route::delete('/cupcake/{id}', [CupcakeController::class, 'deleteCupcake'])->middleware(EnsureUserIsAdmin::class);
 
 // Cart
-Route::post('/cart', [CartController::class, 'upsert']);
-Route::get('/cart', [CartController::class, 'show']);
+Route::middleware(['auth:sanctum'])->post('/cart', [CartController::class, 'upsert']);
+Route::middleware(['auth:sanctum'])->post('/cart/remove/{id}', [CartController::class, 'remove_item']);
+Route::middleware(['auth:sanctum'])->post('/cart/empty', [CartController::class, 'empty']);
+Route::middleware(['auth:sanctum'])->get('/cart', [CartController::class, 'show']);
 
 // Command
 Route::get('/commands', [CommandController::class, 'index']);

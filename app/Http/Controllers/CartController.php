@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -46,23 +39,27 @@ class CartController extends Controller
     {
         $cart = $request->user()->cart()
         ->with('cupcakes')
-        ->first();
+        ->firstOrFail();
         return response($cart);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cart $cart)
+    public function remove_item(Request $request, $id)
     {
-        //
+        $cart = $request->user()->cart;
+        $cart->cupcakes()->detach($id);
+        return response($cart->refresh());
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Empties the specified resource from storage.
      */
-    public function destroy(Cart $cart)
+    public function empty(Request $request)
     {
-        //
+        $cart = $request->user()->cart;
+        $cart->cupcakes()->detach();
+        return response($cart->refresh());
     }
 }

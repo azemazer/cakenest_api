@@ -26,8 +26,6 @@ test('Valid promocode reduces command price', function (){
         'cupcakes' => $cupcakes_array,
         'promocode' => $promocode->code,
     ])
-    // ;
-    // dd($response);
     ->assertCreated();
 
     $total = 0;
@@ -35,7 +33,6 @@ test('Valid promocode reduces command price', function (){
         $total += $cupcake["price"] * $cupcake["quantity"];
     }
     $total_reductions = $total - ($total * $promocode->percentage / 100);
-    // dd([$total_reductions, $total, $response->json()]);
     expect($response->json('total_reductions'))->toBe((int)$total_reductions);
 
     // 'cupcakes' => $cupcakes->toArray(),
